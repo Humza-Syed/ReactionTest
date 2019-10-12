@@ -3,7 +3,6 @@ package ReactionSpeed;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -13,8 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ReactionSpeedGame {
 	private int attempts;
-	private int [] reactionTimes;
-	private Color [] colors = {Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.ORANGE,Color.TURQUOISE,Color.PURPLE};
+	private float [] reactionTimes;
 
 	@FXML
 	AnchorPane mainPane;
@@ -23,33 +21,58 @@ public class ReactionSpeedGame {
 
 	public void initialize(){
 		this.attempts = 5;
-		reactionTimes = new int[attempts];
+		reactionTimes = new float[attempts];
 	}
 
 	public void playGame(){
 		int switches = 0;
+		boolean colourSwapped = false;
+		long reactionTime = 0;
 		Random rand = new Random();
-
 		Scene scene = this.mainPane.getScene();
-		mainPane.setStyle("-fx-background-color: black");
+
 
 		new AnimationTimer(){
 			long lastNanoTime = System.nanoTime();
+			long timeBetweenSwap = (rand.nextInt(15 - 5) + 5) * 1000;
+			int swapped =0;
 
 			public void handle(long currentNanoTime){
-				double t = currentNanoTime - lastNanoTime / 100000000;
-				lastNanoTime = currentNanoTime;
+				long t = currentNanoTime - lastNanoTime;
+				long ms = TimeUnit.NANOSECONDS.toMillis(t);
 
-				//TODO Change the color randomly, allow user input
-				try{
-					TimeUnit.SECONDS.sleep(rand.nextInt(14) + 1);
-				}catch(Exception e){
-					e.printStackTrace();
+				if(ms >= timeBetweenSwap){
+					System.out.println("hi");
+					timeBetweenSwap = (rand.nextInt(15 -5) + 5) * 1000;
+					changeBackground(swapped);
+					swapped++;
+					lastNanoTime = currentNanoTime;
 				}
 
-				System.out.println(t);
+				//TODO Allow user input
 			}
 		}.start();
+	}
+
+	private void changeBackground(int newColour){
+		switch (newColour){
+			case 0: mainPane.setStyle("-fx-background-color: green");
+			break;
+			case 1: mainPane.setStyle("-fx-background-color: blue");
+				break;
+			case 2: mainPane.setStyle("-fx-background-color: red");
+				break;
+			case 3: mainPane.setStyle("-fx-background-color: yellow");
+				break;
+			case 4: mainPane.setStyle("-fx-background-color: orange");
+				break;
+			case 5: mainPane.setStyle("-fx-background-color: purple");
+				break;
+			case 6: mainPane.setStyle("-fx-background-color: turquoise");
+				break;
+			case 7: mainPane.setStyle("-fx-background-color: darkgreen");
+				break;
+		}
 	}
 
 }
