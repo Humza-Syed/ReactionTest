@@ -18,15 +18,20 @@ public class ReactionSpeedGame {
 
 	private boolean playerReacted;
 	private boolean colourSwapped = false;
+	private Text gameInfo = new Text();
 
 	@FXML
 	AnchorPane mainPane;
 	@FXML
 	Button playGame;
+	@FXML
+	Button restartGame;
 
 	public void initialize(){
 		this.attempts = 5;
 		reactionTimes = new float[attempts];
+		mainPane.getChildren().add(gameInfo);
+		gameInfo.setVisible(false);
 	}
 
 	public void playGame(){
@@ -35,12 +40,11 @@ public class ReactionSpeedGame {
 		Random rand = new Random();
 		Scene scene = this.mainPane.getScene();
 
-		Text gameInfo = new Text();
 		gameInfo.setText("Press any key when the background colour changes");
 		gameInfo.setStyle("-fx-font-size: 20");
 		gameInfo.setX(mainPane.getWidth()/6);
 		gameInfo.setY(mainPane.getHeight()/4);
-		mainPane.getChildren().add(gameInfo);
+		gameInfo.setVisible(true);
 
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
 			if(colourSwapped)
@@ -94,7 +98,7 @@ public class ReactionSpeedGame {
 	}
 
 	private void changeBackground(int newColour){
-		switch (newColour){
+		switch (newColour % 8){
 			case 0: mainPane.setStyle("-fx-background-color: green");
 			break;
 			case 1: mainPane.setStyle("-fx-background-color: blue");
@@ -115,12 +119,11 @@ public class ReactionSpeedGame {
 	}
 
 	private void endGameScreen(){
-        Text scores = new Text();
-        scores.setText("Game Over\nBest score: "  + bestTime + " Average score: " + averageTime());
-        scores.setX(mainPane.getWidth()/4);
-        scores.setY(mainPane.getHeight()/4);
-        scores.setStyle("-fx-font-size: 20");
-        mainPane.getChildren().add(scores);
+        gameInfo.setText("Game Over\nBest score: "  + bestTime + " Average score: " + averageTime());
+        mainPane.getChildren().add(gameInfo);
+
+        restartGame.setVisible(true);
+
     }
 
     private float averageTime(){
@@ -131,5 +134,17 @@ public class ReactionSpeedGame {
 
 	    return averageTime / reactionTimes.length;
     }
+
+    public void restartGame(){
+		for(int i = 0;i < reactionTimes.length;i++)
+			reactionTimes[i] = 0;
+
+		bestTime = 0;
+		colourSwapped = false;
+		playerReacted = false;
+		restartGame.setVisible(false);
+		playGame();
+	}
+
 
 }

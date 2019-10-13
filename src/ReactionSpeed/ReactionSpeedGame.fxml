@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -10,6 +7,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ReactionSpeed.ReactionSpeedGame"
             fx:id="mainPane"
-            prefHeight="400.0" prefWidth="600.0">
-    <Button fx:id="playGame" text="play" onAction="#playGame" alignment="CENTER"/>
+            prefHeight="400.0" prefWidth="600.0" >
+    <Button fx:id="playGame" text="play" onAction="#playGame" alignment="CENTER" layoutX="300" layoutY="200"/>
+    <Button fx:id="restartGame" text="Play Again" onAction="#restartGame" alignment="CENTER"
+            layoutX="300" layoutY="200" visible="false"/>
 </AnchorPane>
