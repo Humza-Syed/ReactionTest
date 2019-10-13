@@ -35,6 +35,13 @@ public class ReactionSpeedGame {
 		Random rand = new Random();
 		Scene scene = this.mainPane.getScene();
 
+		Text gameInfo = new Text();
+		gameInfo.setText("Press any key when the background colour changes");
+		gameInfo.setStyle("-fx-font-size: 20");
+		gameInfo.setX(mainPane.getWidth()/6);
+		gameInfo.setY(mainPane.getHeight()/4);
+		mainPane.getChildren().add(gameInfo);
+
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
 			if(colourSwapped)
 				playerReacted = true;
@@ -70,7 +77,7 @@ public class ReactionSpeedGame {
                     if(playerReactionTime < bestTime || bestTime == 0)
                         bestTime = playerReactionTime;
 
-                    //System.out.println(reactionTimes[swapped]);
+                    gameInfo.setText("Best Time: " + bestTime + " Previous Time: " + playerReactionTime);
                     swapped++;
                     playerReacted = false;
                     colourSwapped = false;
@@ -78,6 +85,7 @@ public class ReactionSpeedGame {
 
 				if(swapped == attempts){
 					stop();
+					mainPane.getChildren().remove(gameInfo);
                     endGameScreen();
                 }
 
