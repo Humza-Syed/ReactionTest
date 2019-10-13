@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class ReactionSpeedGame {
 	private int attempts;
 	private float [] reactionTimes;
+	private float bestTime = 0;
 
 	private boolean playerReacted;
 	private boolean colourSwapped = false;
@@ -40,7 +42,7 @@ public class ReactionSpeedGame {
 
 		new AnimationTimer(){
 			long lastNanoTime = System.nanoTime();
-			long timeBetweenSwap = (rand.nextInt(15 - 5) + 5) * 1000;
+			long timeBetweenSwap = (rand.nextInt(10 - 5) + 5) * 1000;
 			int swapped =0;
 
 			long timeColourSwapped;
@@ -53,7 +55,7 @@ public class ReactionSpeedGame {
 				if(ms >= timeBetweenSwap && !colourSwapped){
 					timeColourSwapped = currentNanoTime - lastNanoTime;
 					colourSwapped = true;
-					timeBetweenSwap = (rand.nextInt(15 -5) + 5) * 1000;
+					timeBetweenSwap = (rand.nextInt(10 - 3) + 3) * 1000;
 					changeBackground(swapped);
 					lastNanoTime = currentNanoTime;
 				}
@@ -61,18 +63,23 @@ public class ReactionSpeedGame {
 				if(playerReacted){
 					playerReactionTime = currentNanoTime - lastNanoTime;
 					playerReactionTime = TimeUnit.NANOSECONDS.toMillis(playerReactionTime);
-					reactionTimes[swapped] = playerReactionTime;
-					System.out.println(reactionTimes[swapped]);
-					swapped++;
-					playerReacted = false;
-					colourSwapped = false;
-					lastNanoTime = currentNanoTime;
+                    lastNanoTime = currentNanoTime;
+                    reactionTimes[swapped] = playerReactionTime;
+
+                    // Keep track of the best time set by the player.
+                    if(playerReactionTime < bestTime || bestTime == 0)
+                        bestTime = playerReactionTime;
+
+                    //System.out.println(reactionTimes[swapped]);
+                    swapped++;
+                    playerReacted = false;
+                    colourSwapped = false;
 				}
 
 				if(swapped == attempts){
-					System.out.println("Game Over");
 					stop();
-				}
+                    endGameScreen();
+                }
 
 			}
 		}.start();
@@ -98,5 +105,23 @@ public class ReactionSpeedGame {
 				break;
 		}
 	}
+
+	private void endGameScreen(){
+        Text scores = new Text();
+        scores.setText("Game Over\nBest score: "  + bestTime + " Average score: " + averageTime());
+        scores.setX(mainPane.getWidth()/4);
+        scores.setY(mainPane.getHeight()/4);
+        scores.setStyle("-fx-font-size: 20");
+        mainPane.getChildren().add(scores);
+    }
+
+    private float averageTime(){
+	    float averageTime = 0;
+
+	    for(float reaction : reactionTimes)
+	        averageTime += reaction;
+
+	    return averageTime / reactionTimes.length;
+    }
 
 }
