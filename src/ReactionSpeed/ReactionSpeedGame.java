@@ -1,6 +1,7 @@
 package ReactionSpeed;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +28,8 @@ public class ReactionSpeedGame {
 	Button playGame;
 	@FXML
 	Button restartGame;
+	@FXML
+	Button exitGame;
 
 	public void initialize(){
 		this.attempts = 5;
@@ -123,6 +127,7 @@ public class ReactionSpeedGame {
         mainPane.getChildren().add(gameInfo);
 
         restartGame.setVisible(true);
+        exitGame.setVisible(true);
 
     }
 
@@ -136,15 +141,17 @@ public class ReactionSpeedGame {
     }
 
     public void restartGame(){
-		for(int i = 0;i < reactionTimes.length;i++)
-			reactionTimes[i] = 0;
+		Arrays.fill(reactionTimes, 0);
 
 		bestTime = 0;
 		colourSwapped = false;
 		playerReacted = false;
 		restartGame.setVisible(false);
+		exitGame.setVisible(false);
 		playGame();
 	}
 
-
+	public void exitProgram(){
+		Platform.exit();
+	}
 }

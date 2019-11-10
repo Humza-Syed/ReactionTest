@@ -11,4 +11,5 @@
     <Button fx:id="playGame" text="play" onAction="#playGame" alignment="CENTER" layoutX="300" layoutY="200"/>
     <Button fx:id="restartGame" text="Play Again" onAction="#restartGame" alignment="CENTER"
             layoutX="300" layoutY="200" visible="false"/>
+    <Button fx:id="exitGame" text="Exit" onAction="#exitProgram" alignment="CENTER" layoutX="200" layoutY="200" visible="false"/>
 </AnchorPane>
