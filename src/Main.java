@@ -25,7 +25,7 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	public void reacSpeedGamePressed(){
+	public void reactSpeedGamePressed(){
 		try{
 			Parent root = FXMLLoader.load(getClass().getResource("/ReactionSpeed/ReactionSpeedGame.fxml"));
 			Scene gameScene = new Scene(root);
